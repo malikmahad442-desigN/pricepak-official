@@ -1,0 +1,179 @@
+{
+  "products": [
+    {
+      "name": "Samsung Galaxy A55 5G",
+      "category": "Mobiles",
+      "price": 119999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Samsung Galaxy S25",
+      "category": "Mobiles",
+      "price": 249999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "iPhone 15",
+      "category": "Mobiles",
+      "price": 224999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "iPhone 16",
+      "category": "Mobiles",
+      "price": 279999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Google Pixel 9",
+      "category": "Mobiles",
+      "price": 189999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "OnePlus 13",
+      "category": "Mobiles",
+      "price": 219999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "HP Pavilion 15",
+      "category": "Laptops",
+      "price": 174999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "HP Victus Gaming 15",
+      "category": "Laptops",
+      "price": 239999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Dell Inspiron 15",
+      "category": "Laptops",
+      "price": 169999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "MacBook Air M3",
+      "category": "Laptops",
+      "price": 299999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "MacBook Pro M4",
+      "category": "Laptops",
+      "price": 499999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Sony WH-1000XM5",
+      "category": "Audio",
+      "price": 79999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Apple AirPods Pro 2",
+      "category": "Audio",
+      "price": 69999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "JBL Tune 770NC",
+      "category": "Audio",
+      "price": 22999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Samsung 55-inch 4K Smart TV",
+      "category": "TV",
+      "price": 139999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "TCL 55-inch QLED TV",
+      "category": "TV",
+      "price": 119999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Apple Watch Series 10",
+      "category": "Watches",
+      "price": 89999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Samsung Galaxy Watch 7",
+      "category": "Watches",
+      "price": 74999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "PlayStation 5 Slim",
+      "category": "Gaming",
+      "price": 189999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Xbox Series X",
+      "category": "Gaming",
+      "price": 199999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Nike Air Max",
+      "category": "Fashion",
+      "price": 29999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Adidas Running Shoes",
+      "category": "Fashion",
+      "price": 24999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Samsung Refrigerator",
+      "category": "Home",
+      "price": 219999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Microwave Oven",
+      "category": "Home",
+      "price": 34999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1585659722983-3a675dabf23d?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Wireless Mouse",
+      "category": "Accessories",
+      "price": 4999,
+      "store": "PricePak Demo Store",
+      "image": "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=800&q=80"
+    }
+  ]
+}

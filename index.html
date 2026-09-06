@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PricePak — Compare. Check. Save.</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #06140d;
+    color: white;
+}
+
+header {
+    padding: 25px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #183c29;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.logo span {
+    color: #45e878;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+}
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero h1 {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.hero h1 span {
+    color: #45e878;
+}
+
+.hero p {
+    color: #a9b9af;
+    font-size: 18px;
+    margin-bottom: 35px;
+}
+
+.search {
+    max-width: 650px;
+    margin: auto;
+    display: flex;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.search input {
+    flex: 1;
+    border: none;
+    padding: 18px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search button {
+    border: none;
+    padding: 0 25px;
+    background: #45e878;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+section {
+    padding: 40px 7%;
+}
+
+h2 {
+    margin-bottom: 25px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.category {
+    background: #0d2417;
+    padding: 25px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid #193d28;
+    cursor: pointer;
+}
+
+.category:hover {
+    border-color: #45e878;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.product {
+    background: #0d2417;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #193d28;
+}
+
+.product-img {
+    height: 150px;
+    background: #132e1e;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 55px;
+    margin-bottom: 18px;
+}
+
+.product h3 {
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #45e878;
+}
+
+.store {
+    color: #9aaa9f;
+    margin: 8px 0;
+}
+
+.badge {
+    display: inline-block;
+    background: #45e878;
+    color: #06140d;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    color: #899a90;
+    border-top: 1px solid #183c29;
+}
+
+@media(max-width:600px) {
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    nav {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Price<span>Pak</span></div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#products">Products</a>
+        <a href="#categories">Categories</a>
+    </nav>
+</header>
+
+<div class="hero">
+
+    <h1>Find the <span>Best Price</span></h1>
+
+    <p>Compare prices. Check deals. Save money.</p>
+
+    <div class="search">
+        <input id="searchInput"
+               type="text"
+               placeholder="Search products...">
+
+        <button onclick="searchProducts()">
+            Search
+        </button>
+    </div>
+
+</div>
+
+<section id="categories">
+
+<h2>Popular Categories</h2>
+
+<div class="categories">
+
+<div class="category">📱 Smartphones</div>
+<div class="category">💻 Laptops</div>
+<div class="category">🎧 Audio</div>
+<div class="category">🎮 Gaming</div>
+<div class="category">📺 TVs</div>
+<div class="category">⌚ Watches</div>
+
+</div>
+
+</section>
+
+<section id="products">
+
+<h2>Popular Products</h2>
+
+<div class="products" id="productList">
+
+<div class="product">
+
+<div class="product-img">📱</div>
+
+<h3>Samsung Galaxy A55</h3>
+
+<div class="price">Rs. 89,999</div>
+
+<div class="store">Example Store</div>
+
+<span class="badge">Best Price</span>
+
+</div>
+
+
+<div class="product">
+
+<div class="product-img">💻</div>
+
+<h3>HP Laptop</h3>
+
+<div class="price">Rs. 149,999</div>
+
+<div class="store">Example Store</div>
+
+<span class="badge">Best Price</span>
+
+</div>
+
+
+<div class="product">
+
+<div class="product-img">🎧</div>
+
+<h3>Wireless Headphones</h3>
+
+<div class="price">Rs. 7,999</div>
+
+<div class="store">Example Store</div>
+
+<span class="badge">Best Price</span>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>© 2026 PricePak — Compare. Check. Save.</p>
+
+<p>Created by Mahad</p>
+
+</footer>
+
+<script>
+
+function searchProducts() {
+
+    let input =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    let products =
+        document.querySelectorAll(".product");
+
+    products.forEach(function(product) {
+
+        let name =
+            product.querySelector("h3")
+            .innerText
+            .toLowerCase();
+
+        if (name.includes(input)) {
+            product.style.display = "block";
+        } else {
+            product.style.display = "none";
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

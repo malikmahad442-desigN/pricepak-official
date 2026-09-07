@@ -1,877 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PricePak — 1M+ Product Price Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<title>PricePak — Compare. Check. Save.</title>
+        body {
+            background-color: #0b1120;
+            color: #f1f5f9;
+            padding: 15px;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        header {
+            text-align: center;
+            padding: 20px 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-body{
-    font-family:Arial, sans-serif;
-    background:#07110e;
-    color:#f5fff9;
-}
+        header h1 {
+            color: #38bdf8;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
 
-/* HEADER */
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:rgba(7,17,14,.95);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
+        .search-box {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
 
-.nav{
-    max-width:1250px;
-    margin:auto;
-    padding:18px 25px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
+        .search-box input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
 
-.logo{
-    font-size:28px;
-    font-weight:900;
-}
+        .search-box input:focus {
+            border-color: #38bdf8;
+        }
 
-.logo span{
-    color:#28e38b;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
 
-.tag{
-    color:#91a69d;
-    font-size:12px;
-    margin-top:3px;
-}
+        .product-card {
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-.navlinks{
-    display:flex;
-    gap:25px;
-}
+        .product-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 6px;
+            background-color: #0f172a;
+            margin-bottom: 12px;
+        }
 
-.navlinks a{
-    color:#cbd8d2;
-    text-decoration:none;
-    font-size:14px;
-}
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fff;
+        }
 
-.navlinks a:hover{
-    color:#28e38b;
-}
+        .price-row {
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            margin-bottom: 8px;
+        }
 
-/* HERO */
-.hero{
-    max-width:1250px;
-    margin:auto;
-    padding:75px 25px 55px;
-    text-align:center;
-}
+        .cheap {
+            background-color: rgba(34, 197, 94, 0.12);
+            border-left: 3px solid #22c55e;
+            color: #4ade80;
+        }
 
-.badge{
-    display:inline-block;
-    padding:8px 14px;
-    border:1px solid rgba(40,227,139,.25);
-    background:rgba(40,227,139,.08);
-    color:#28e38b;
-    border-radius:30px;
-    font-size:13px;
-    margin-bottom:20px;
-}
+        .expensive {
+            background-color: rgba(239, 68, 68, 0.12);
+            border-left: 3px solid #ef4444;
+            color: #f87171;
+        }
 
-.hero h1{
-    font-size:clamp(40px,7vw,76px);
-    line-height:1;
-    letter-spacing:-3px;
-}
+        .price-row strong {
+            display: block;
+            font-size: 1rem;
+            color: #fff;
+        }
 
-.hero h1 span{
-    color:#28e38b;
-}
+        .address {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
 
-.hero p{
-    max-width:650px;
-    margin:22px auto;
-    color:#9caaa5;
-    line-height:1.7;
-}
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
 
-.searchbox{
-    max-width:720px;
-    margin:30px auto 0;
-    display:flex;
-    background:#101d19;
-    border:1px solid #263a32;
-    border-radius:16px;
-    padding:7px;
-}
-
-.searchbox input{
-    flex:1;
-    background:none;
-    border:none;
-    outline:none;
-    color:white;
-    padding:14px;
-    font-size:15px;
-}
-
-.searchbox button{
-    border:none;
-    background:#28e38b;
-    color:#03130c;
-    font-weight:800;
-    padding:0 23px;
-    border-radius:11px;
-    cursor:pointer;
-}
-
-/* CATEGORIES */
-.categories{
-    max-width:1250px;
-    margin:auto;
-    padding:15px 25px 40px;
-}
-
-.categories h2{
-    margin-bottom:18px;
-}
-
-.category-list{
-    display:flex;
-    gap:12px;
-    overflow-x:auto;
-    padding-bottom:8px;
-}
-
-.category{
-    flex:0 0 auto;
-    padding:12px 18px;
-    background:#101d19;
-    border:1px solid #24372f;
-    border-radius:30px;
-    cursor:pointer;
-    color:#b9c9c2;
-}
-
-.category:hover,
-.category.active{
-    background:#28e38b;
-    color:#03130c;
-    border-color:#28e38b;
-}
-
-/* PRODUCTS */
-.products{
-    max-width:1250px;
-    margin:auto;
-    padding:15px 25px 80px;
-}
-
-.product-count{
-    color:#8fa39a;
-    margin-bottom:20px;
-    font-size:14px;
-}
-
-.product-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:linear-gradient(145deg,#101d19,#0b1613);
-    border:1px solid #20342c;
-    border-radius:20px;
-    overflow:hidden;
-    transition:.25s;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-    border-color:#28e38b;
-    box-shadow:0 15px 40px rgba(0,0,0,.3);
-}
-
-.image-wrap{
-    height:220px;
-    background:#fff;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-.image-wrap img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    padding:18px;
-}
-
-.lowest{
-    position:absolute;
-    top:12px;
-    left:12px;
-    background:#28e38b;
-    color:#03130c;
-    padding:7px 10px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:900;
-    z-index:2;
-}
-
-.info{
-    padding:18px;
-}
-
-.category-name{
-    color:#28e38b;
-    font-size:11px;
-    text-transform:uppercase;
-    font-weight:800;
-    letter-spacing:1px;
-}
-
-.info h3{
-    margin:7px 0;
-    font-size:17px;
-}
-
-.price{
-    font-size:22px;
-    font-weight:900;
-    margin:12px 0;
-}
-
-.store{
-    color:#8fa39a;
-    font-size:12px;
-}
-
-.compare{
-    width:100%;
-    margin-top:15px;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid #2a4338;
-    background:#14251e;
-    color:white;
-    cursor:pointer;
-    font-weight:700;
-}
-
-.compare:hover{
-    background:#28e38b;
-    color:#03130c;
-}
-
-/* EMPTY */
-.empty{
-    text-align:center;
-    padding:70px 20px;
-    color:#899b93;
-    display:none;
-}
-
-/* LOADING */
-.loading{
-    text-align:center;
-    padding:70px 20px;
-    color:#28e38b;
-}
-
-/* FOOTER */
-footer{
-    border-top:1px solid #1d3028;
-    padding:35px 20px;
-    text-align:center;
-    color:#7f9189;
-}
-
-footer strong{
-    color:#28e38b;
-}
-
-@media(max-width:700px){
-
-    .navlinks{
-        display:none;
-    }
-
-    .hero{
-        padding-top:50px;
-    }
-
-    .hero h1{
-        letter-spacing:-2px;
-    }
-
-    .searchbox{
-        flex-direction:column;
-        gap:7px;
-    }
-
-    .searchbox button{
-        padding:13px;
-    }
-
-    .product-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
-    }
-
-    .image-wrap{
-        height:155px;
-    }
-
-    .info{
-        padding:13px;
-    }
-
-    .info h3{
-        font-size:14px;
-    }
-
-    .price{
-        font-size:17px;
-    }
-}
-</style>
+        .pagination button {
+            padding: 8px 16px;
+            background-color: #38bdf8;
+            border: none;
+            color: #0f172a;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-
-<div class="nav">
-
-<div>
-<div class="logo">Price<span>Pak</span></div>
-<div class="tag">Compare. Check. Save.</div>
-</div>
-
-<div class="navlinks">
-<a href="#products">Products</a>
-<a href="#categories">Categories</a>
-<a href="#about">About</a>
-</div>
-
-</div>
-
-</header>
-
-
-<section class="hero">
-
-<div class="badge">
-🇵🇰 Pakistan's Smart Price Comparison
-</div>
-
-<h1>
-Find it.<br>
-<span>Compare it.</span><br>
-Save more.
-</h1>
-
-<p>
-Compare products and prices in Pakistan from one simple place.
-Find the product you want, check its price and make a smarter buying decision.
-</p>
-
-<div class="searchbox">
-
-<input
-id="searchInput"
-type="text"
-placeholder="Search mobiles, laptops, TVs, headphones..."
->
-
-<button onclick="searchProducts()">
-Search
-</button>
-
-</div>
-
-</section>
-
-
-<section class="categories" id="categories">
-
-<h2>Explore Categories</h2>
-
-<div class="category-list">
-
-<div class="category active"
-onclick="filterCategory('All',this)">
-All
-</div>
-
-<div class="category"
-onclick="filterCategory('Mobiles',this)">
-📱 Mobiles
-</div>
-
-<div class="category"
-onclick="filterCategory('Laptops',this)">
-💻 Laptops
-</div>
-
-<div class="category"
-onclick="filterCategory('Audio',this)">
-🎧 Audio
-</div>
-
-<div class="category"
-onclick="filterCategory('TV',this)">
-📺 TVs
-</div>
-
-<div class="category"
-onclick="filterCategory('Watches',this)">
-⌚ Watches
-</div>
-
-<div class="category"
-onclick="filterCategory('Gaming',this)">
-🎮 Gaming
-</div>
-
-<div class="category"
-onclick="filterCategory('Fashion',this)">
-👟 Fashion
-</div>
-
-<div class="category"
-onclick="filterCategory('Home',this)">
-🏠 Home
-</div>
-
-<div class="category"
-onclick="filterCategory('Accessories',this)">
-🔌 Accessories
-</div>
-
-</div>
-
-</section>
-
-
-<section class="products" id="products">
-
-<div class="product-count" id="productCount">
-Loading products...
-</div>
-
-<div class="loading" id="loading">
-Loading PricePak database...
-</div>
-
-<div class="product-grid" id="productGrid"></div>
-
-<div class="empty" id="empty">
-
-<h2>No products found 😕</h2>
-
-<p>
-Try another product name or category.
-</p>
-
-</div>
-
-</section>
-
-
-<footer id="about">
-
-<p>
-<strong>PricePak</strong> — Compare. Check. Save.
-</p>
-
-<p style="margin-top:8px">
-Built with ❤️ in Pakistan
-</p>
-
-<p style="margin-top:12px;font-size:12px">
-Created by Mahad
-</p>
-
-</footer>
-
-
-<script>
-
-let products = [];
-
-let currentCategory = "All";
-
-let currentSearch = "";
-
-
-/* =========================
-   LOAD PRODUCTS.JSON
-========================= */
-
-async function loadProducts(){
-
-    const loading =
-        document.getElementById("loading");
-
-    try{
-
-        const response =
-            await fetch("./products.json");
-
-        if(!response.ok){
-
-            throw new Error(
-                "products.json not found"
-            );
-
-        }
-
-        products =
-            await response.json();
-
-        loading.style.display = "none";
-
-        document.getElementById(
-            "productCount"
-        ).textContent =
-            products.length.toLocaleString()
-            + " products available";
-
-        renderProducts();
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        loading.innerHTML = `
-            <h2 style="color:#ff7777">
-                Database load nahi ho saka
-            </h2>
-
-            <p style="margin-top:10px;color:#899b93">
-                Check karo ke
-                <strong>products.json</strong>
-                same folder mein hai.
-            </p>
-        `;
-
-    }
-
-}
-
-
-/* =========================
-   RENDER PRODUCTS
-========================= */
-
-function renderProducts(){
-
-    const grid =
-        document.getElementById("productGrid");
-
-    const empty =
-        document.getElementById("empty");
-
-    grid.innerHTML = "";
-
-
-    const filtered =
-        products.filter(product => {
-
-            const categoryMatch =
-                currentCategory === "All" ||
-                product.category === currentCategory;
-
-
-            const searchableText = (
-
-                String(product.name || "") +
-                " " +
-                String(product.brand || "") +
-                " " +
-                String(product.category || "") +
-                " " +
-                String(product.type || "")
-
-            ).toLowerCase();
-
-
-            const searchMatch =
-                searchableText.includes(
-                    currentSearch.toLowerCase()
-                );
-
-
-            return categoryMatch &&
-                   searchMatch;
-
-        });
-
-
-    if(filtered.length === 0){
-
-        empty.style.display = "block";
-
-        return;
-
-    }
-
-
-    empty.style.display = "none";
-
-
-    /*
-       IMPORTANT:
-       Browser mein ek million cards
-       ek saath render nahi karte.
-       Pehle 60 products show honge.
-    */
-
-    const visibleProducts =
-        filtered.slice(0,60);
-
-
-    visibleProducts.forEach(product => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "card";
-
-
-        const image =
-            product.image ||
-            "https://placehold.co/600x600?text=PricePak";
-
-
-        const price =
-            Number(product.price || 0);
-
-
-        const safeName =
-            String(product.name || "Product");
-
-
-        const safeCategory =
-            String(product.category || "General");
-
-
-        const safeStore =
-            String(product.store || "Store");
-
-
-        card.innerHTML = `
-
-        <div class="image-wrap">
-
-            <div class="lowest">
-                BEST PRICE
-            </div>
-
-            <img
-                src="${image}"
-                alt="${safeName}"
-                loading="lazy"
-                onerror="
-                    this.src='https://placehold.co/600x600?text=No+Image'
-                "
-            >
-
+    <header>
+        <h1>PricePak</h1>
+        <p>10 Lakh+ Products ki Qeemat ka Muqabla</p>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search product name..." onkeyup="searchProduct()">
+        </div>
+    </header>
+
+    <div class="container" id="productGrid">
         </div>
 
-
-        <div class="info">
-
-            <div class="category-name">
-                ${safeCategory}
-            </div>
-
-            <h3>
-                ${safeName}
-            </h3>
-
-            <div class="price">
-
-                PKR ${price.toLocaleString()}
-
-            </div>
-
-            <div class="store">
-
-                Available at:
-                ${safeStore}
-
-            </div>
-
-            <button
-                class="compare"
-                onclick="compareProduct(${JSON.stringify(safeName)})"
-            >
-
-                Compare Prices →
-
-            </button>
-
-        </div>
-
-        `;
-
-
-        grid.appendChild(card);
-
-    });
-
-
-    if(filtered.length > 60){
-
-        const more =
-            document.createElement("div");
-
-        more.style.gridColumn = "1 / -1";
-
-        more.style.textAlign = "center";
-
-        more.style.padding = "30px";
-
-        more.style.color = "#8fa39a";
-
-        more.innerHTML = `
-
-            Showing first
-            <strong>${visibleProducts.length}</strong>
-            of
-            <strong>${filtered.length.toLocaleString()}</strong>
-            matching products.
-
-        `;
-
-        grid.appendChild(more);
-
-    }
-
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-function searchProducts(){
-
-    currentSearch =
-        document
-        .getElementById("searchInput")
-        .value
-        .trim();
-
-
-    renderProducts();
-
-
-    document
-        .getElementById("products")
-        .scrollIntoView({
-
-            behavior:"smooth"
-
-        });
-
-}
-
-
-/* =========================
-   CATEGORY
-========================= */
-
-function filterCategory(
-    category,
-    element
-){
-
-    currentCategory =
-        category;
-
-
-    document
-        .querySelectorAll(".category")
-        .forEach(button => {
-
-            button.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    element.classList.add(
-        "active"
-    );
-
-
-    renderProducts();
-
-}
-
-
-/* =========================
-   COMPARE
-========================= */
-
-function compareProduct(name){
-
-    alert(
-        "Price comparison for " +
-        name +
-        " will be connected to multiple store offers."
-    );
-
-}
-
-
-/* =========================
-   ENTER KEY SEARCH
-========================= */
-
-document
-    .getElementById("searchInput")
-    .addEventListener(
-        "keyup",
-        function(event){
-
-            if(event.key === "Enter"){
-
-                searchProducts();
-
+    <div class="pagination">
+        <button onclick="prevPage()">Previous</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    <script>
+        // Sample Data Structure (یہاں API یا Database کا ڈیٹا آئے گا)
+        const products = [
+            {
+                title: "Mobile Phone Model X",
+                img: "https://via.placeholder.com/300x160",
+                cheapPrice: "Rs. 45,000",
+                cheapAddr: "Hall Road, Lahore",
+                expPrice: "Rs. 52,000",
+                expAddr: "Shopping Mall, Karachi"
+            },
+            {
+                title: "Grocery Cooking Oil 5L",
+                img: "https://via.placeholder.com/300x160",
+                cheapPrice: "Rs. 2,400",
+                cheapAddr: "Wholesale Market, Rawalpindi",
+                expPrice: "Rs. 2,850",
+                expAddr: "Super Market, Islamabad"
             }
+        ];
 
+        function renderProducts(data) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            data.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.img}" alt="${p.title}" class="product-image">
+                        <div class="product-title">${p.title}</div>
+                        
+                        <div class="price-row cheap">
+                            Sasti Qeemat: <strong>${p.cheapPrice}</strong>
+                            <div class="address">📍 ${p.cheapAddr}</div>
+                        </div>
+
+                        <div class="price-row expensive">
+                            Mehangi Qeemat: <strong>${p.expPrice}</strong>
+                            <div class="address">📍 ${p.expAddr}</div>
+                        </div>
+                    </div>
+                `;
+            });
         }
-    );
 
+        function searchProduct() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = products.filter(p => p.title.toLowerCase().includes(input));
+            renderProducts(filtered);
+        }
 
-/* =========================
-   START WEBSITE
-========================= */
-
-loadProducts();
-
-</script>
-
+        // Initial Render
+        renderProducts(products);
+    </script>
 </body>
 </html>
+

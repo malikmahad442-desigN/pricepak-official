@@ -11,7 +11,7 @@
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
@@ -26,12 +26,10 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:20px;
-    flex-wrap:wrap;
 }
 
 .logo{
-    font-size:28px;
+    font-size:29px;
     font-weight:bold;
 }
 
@@ -40,12 +38,12 @@ header{
 }
 
 .creator{
-    font-size:13px;
+    margin-top:4px;
     color:#cbd5e1;
+    font-size:13px;
 }
 
 .search-box{
-    width:100%;
     background:white;
     padding:20px 6%;
     box-shadow:0 2px 8px rgba(0,0,0,.08);
@@ -68,10 +66,10 @@ header{
 }
 
 .search button{
-    border:none;
+    border:0;
     background:#16a34a;
     color:white;
-    padding:0 25px;
+    padding:0 24px;
     border-radius:10px;
     font-size:16px;
     cursor:pointer;
@@ -93,7 +91,8 @@ header{
     cursor:pointer;
 }
 
-.category:hover{
+.category:hover,
+.category.active{
     background:#16a34a;
     color:white;
 }
@@ -142,6 +141,12 @@ header{
     margin-bottom:18px;
 }
 
+#status{
+    margin-bottom:15px;
+    color:#64748b;
+    font-size:14px;
+}
+
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -181,12 +186,6 @@ header{
     font-weight:bold;
 }
 
-.old{
-    color:#9ca3af;
-    text-decoration:line-through;
-    font-size:13px;
-}
-
 .shop{
     margin-top:10px;
     color:#64748b;
@@ -205,6 +204,7 @@ footer strong{
 }
 
 @media(max-width:600px){
+
     .hero h1{
         font-size:27px;
     }
@@ -235,25 +235,16 @@ footer strong{
             id="searchInput"
             type="text"
             placeholder="Search products..."
-            onkeyup="searchProducts()"
         >
         <button onclick="searchProducts()">Search</button>
     </div>
 </div>
 
-<div class="categories">
-    <div class="category" onclick="filterCategory('All')">All</div>
-    <div class="category" onclick="filterCategory('Mobiles')">📱 Mobiles</div>
-    <div class="category" onclick="filterCategory('Laptops')">💻 Laptops</div>
-    <div class="category" onclick="filterCategory('TV')">📺 TV</div>
-    <div class="category" onclick="filterCategory('Gaming')">🎮 Gaming</div>
-    <div class="category" onclick="filterCategory('Fashion')">👕 Fashion</div>
-    <div class="category" onclick="filterCategory('Home')">🏠 Home</div>
-</div>
+<div class="categories" id="categories"></div>
 
 <section class="hero">
     <h1>Find Better Prices in Pakistan 🇵🇰</h1>
-    <p>Search products and compare prices from different stores.</p>
+    <p>Search and compare products from our growing price database.</p>
 </section>
 
 <section class="stats">
@@ -277,7 +268,9 @@ footer strong{
 
 <section class="products">
 
-    <h2>Popular Products</h2>
+    <h2>Products</h2>
+
+    <div id="status">Loading products...</div>
 
     <div id="productGrid" class="grid"></div>
 
@@ -288,153 +281,46 @@ footer strong{
     <p>Created by Mahad © 2026</p>
 </footer>
 
+
 <script>
 
-const products = [
-
-{
-    name:"Samsung Galaxy S25",
-    price:199999,
-    oldPrice:219999,
-    category:"Mobiles",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
-},
-
-{
-    name:"iPhone 16 Pro",
-    price:349999,
-    oldPrice:379999,
-    category:"Mobiles",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=600&q=80"
-},
-
-{
-    name:"Gaming Laptop",
-    price:289999,
-    oldPrice:319999,
-    category:"Laptops",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80"
-},
-
-{
-    name:"Smart LED TV",
-    price:89999,
-    oldPrice:99999,
-    category:"TV",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=600&q=80"
-},
-
-{
-    name:"Gaming Console",
-    price:159999,
-    oldPrice:179999,
-    category:"Gaming",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=600&q=80"
-},
-
-{
-    name:"Men's Casual Shirt",
-    price:2999,
-    oldPrice:3999,
-    category:"Fashion",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80"
-},
-
-{
-    name:"Modern Sofa",
-    price:79999,
-    oldPrice:89999,
-    category:"Home",
-    shop:"Example Store",
-    image:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80"
-}
-
-];
-
+let products = [];
 let currentCategory = "All";
 
-function displayProducts(list){
 
-    const grid = document.getElementById("productGrid");
+/* LOAD PRODUCTS FROM products.json */
 
-    grid.innerHTML = "";
+async function loadProducts(){
 
-    if(list.length === 0){
-        grid.innerHTML = "<p>No products found.</p>";
-        return;
+    const status = document.getElementById("status");
+
+    try{
+
+        const response = await fetch("products.json");
+
+        if(!response.ok){
+            throw new Error("products.json not found");
+        }
+
+        const data = await response.json();
+
+        products = data.products || [];
+
+        createCategories();
+
+        displayProducts(products);
+
+        status.textContent =
+            products.length + " products loaded";
+
     }
 
-    list.forEach(product => {
+    catch(error){
 
-        const card = document.createElement("div");
+        console.error(error);
 
-        card.className = "card";
+        status.textContent =
+            "Unable to load products.json";
 
-        card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="card-content">
-
-                <h3>${product.name}</h3>
-
-                <div class="price">
-                    Rs. ${product.price.toLocaleString()}
-                </div>
-
-                <div class="old">
-                    Rs. ${product.oldPrice.toLocaleString()}
-                </div>
-
-                <div class="shop">
-                    🛒 ${product.shop}
-                </div>
-
-            </div>
-        `;
-
-        grid.appendChild(card);
-
-    });
-}
-
-function searchProducts(){
-
-    const search =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
-
-    let result = products.filter(product => {
-
-        const matchesSearch =
-            product.name.toLowerCase().includes(search);
-
-        const matchesCategory =
-            currentCategory === "All" ||
-            product.category === currentCategory;
-
-        return matchesSearch && matchesCategory;
-
-    });
-
-    displayProducts(result);
-}
-
-function filterCategory(category){
-
-    currentCategory = category;
-
-    searchProducts();
-}
-
-displayProducts(products);
-
-</script>
-
-</body>
-</html>
+        document.getElementById("productGrid").innerHTML =
+            "<p>Please make sure products.json is

@@ -1,213 +1,369 @@
-<!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PricePak — 1M+ Product Price Comparison</title>
+    <title>PricePak — Pakistan's Largest Price Comparison Engine</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: #0b1120;
-            color: #f1f5f9;
-            padding: 15px;
+            background: #121212;
+            color: #e0e0e0;
+            padding: 20px 15px;
+            min-height: 100vh;
         }
 
         header {
             text-align: center;
-            padding: 20px 0;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 700px;
+            margin: 10px auto 30px auto;
         }
 
         header h1 {
-            color: #38bdf8;
-            font-size: 2.2rem;
-            margin-bottom: 5px;
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header h1 span {
+            color: #00e676;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1rem;
+            margin-top: 6px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
         }
 
         .search-box {
-            margin: 20px 0;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background-color: #1e293b;
-            color: #fff;
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            background: #1e1e1e;
+            color: #ffffff;
             font-size: 1rem;
             outline: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
         }
 
-        .search-box input:focus {
-            border-color: #38bdf8;
+        .search-box:focus {
+            border-color: #00e676;
+            background: #252525;
+        }
+
+        .category-select {
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            background: #1e1e1e;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .stats {
+            text-align: center;
+            margin: 15px 0;
+            color: #00e676;
+            font-weight: bold;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 20px;
         }
 
         .product-card {
-            background-color: #1e293b;
-            border-radius: 10px;
-            padding: 15px;
-            border: 1px solid #334155;
+            background: #1e1e1e;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #2d2d2d;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: #444444;
         }
 
         .product-image {
             width: 100%;
-            height: 160px;
+            height: 180px;
             object-fit: cover;
-            border-radius: 6px;
-            background-color: #0f172a;
-            margin-bottom: 12px;
+            border-radius: 10px;
+            background-color: #2a2a2a;
+            margin-bottom: 14px;
         }
 
         .product-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
-            margin-bottom: 12px;
-            color: #fff;
+            color: #ffffff;
+            margin-bottom: 6px;
         }
 
-        .price-row {
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-size: 0.88rem;
-            margin-bottom: 8px;
+        .product-cat {
+            font-size: 0.8rem;
+            color: #00e676;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .price-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .price-card {
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
         }
 
         .cheap {
-            background-color: rgba(34, 197, 94, 0.12);
-            border-left: 3px solid #22c55e;
-            color: #4ade80;
+            background: rgba(0, 230, 118, 0.08);
+            border-left: 4px solid #00e676;
+        }
+
+        .cheap .price-title {
+            color: #00e676;
+            font-weight: 600;
         }
 
         .expensive {
-            background-color: rgba(239, 68, 68, 0.12);
-            border-left: 3px solid #ef4444;
-            color: #f87171;
+            background: rgba(255, 82, 82, 0.08);
+            border-left: 4px solid #ff5252;
         }
 
-        .price-row strong {
-            display: block;
-            font-size: 1rem;
-            color: #fff;
+        .expensive .price-title {
+            color: #ff5252;
+            font-weight: 600;
+        }
+
+        .price-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 2px 0;
         }
 
         .address {
-            font-size: 0.78rem;
-            color: #94a3b8;
-            margin-top: 2px;
+            font-size: 0.8rem;
+            color: #888888;
         }
 
         .pagination {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin: 30px 0;
+            align-items: center;
+            gap: 15px;
+            margin: 40px 0 20px 0;
         }
 
         .pagination button {
-            padding: 8px 16px;
-            background-color: #38bdf8;
+            padding: 12px 24px;
+            border-radius: 8px;
             border: none;
-            color: #0f172a;
+            background: #00e676;
+            color: #000;
             font-weight: bold;
-            border-radius: 5px;
             cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .pagination button:disabled {
+            background: #333;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        #pageIndicator {
+            color: #aaa;
+            font-size: 0.95rem;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>PricePak</h1>
-        <p>10 Lakh+ Products ki Qeemat ka Muqabla</p>
+        <h1>Price<span>Pak</span></h1>
+        <p>پاکستان کا سب سے بڑا پرائس ڈائریکٹری سسٹم (Dynamic Large Data Engine)</p>
         
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search product name..." onkeyup="searchProduct()">
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-box" placeholder="پراڈکٹ تلاش کریں (مثال: Mobile, Laptop, Rice...)" oninput="filterData()">
+            <select id="categoryFilter" class="category-select" onchange="filterData()">
+                <option value="ALL">تمام کیٹیگریز</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Vehicles">Vehicles</option>
+                <option value="Construction">Construction</option>
+                <option value="Apparel">Apparel</option>
+            </select>
         </div>
     </header>
 
-    <div class="container" id="productGrid">
-        </div>
+    <div class="stats" id="statsDisplay">پراڈکٹس لوڈ ہو رہی ہیں...</div>
+
+    <div class="container" id="productGrid"></div>
 
     <div class="pagination">
-        <button onclick="prevPage()">Previous</button>
-        <button onclick="nextPage()">Next</button>
+        <button id="prevBtn" onclick="changePage(-1)">Previous</button>
+        <span id="pageIndicator">Page 1</span>
+        <button id="nextBtn" onclick="changePage(1)">Next</button>
     </div>
 
     <script>
-        // Sample Data Structure (یہاں API یا Database کا ڈیٹا آئے گا)
-        const products = [
-            {
-                title: "Mobile Phone Model X",
-                img: "https://via.placeholder.com/300x160",
-                cheapPrice: "Rs. 45,000",
-                cheapAddr: "Hall Road, Lahore",
-                expPrice: "Rs. 52,000",
-                expAddr: "Shopping Mall, Karachi"
-            },
-            {
-                title: "Grocery Cooking Oil 5L",
-                img: "https://via.placeholder.com/300x160",
-                cheapPrice: "Rs. 2,400",
-                cheapAddr: "Wholesale Market, Rawalpindi",
-                expPrice: "Rs. 2,850",
-                expAddr: "Super Market, Islamabad"
-            }
+        const categories = ["Electronics", "Groceries", "Vehicles", "Construction", "Apparel"];
+        const cities = ["Lahore", "Karachi", "Islamabad", "Rawalpindi", "Peshawar", "Multan", "Abbottabad", "Mansehra", "Oghi", "Quetta"];
+        const markets = ["Main Wholesale Market", "Shopping Mall", "Commercial Center", "Factory Outlet", "Local Bazaar", "Super Store"];
+        
+        const baseProducts = [
+            { name: "Smartphone", cat: "Electronics", basePrice: 45000 },
+            { name: "Laptop Core i5", cat: "Electronics", basePrice: 120000 },
+            { name: "LED TV 43 Inch", cat: "Electronics", basePrice: 65000 },
+            { name: "Basmati Rice 10kg", cat: "Groceries", basePrice: 3800 },
+            { name: "Cooking Oil 5L", cat: "Groceries", basePrice: 2600 },
+            { name: "Wheat Flour 20kg", cat: "Groceries", basePrice: 2800 },
+            { name: "Motorbike 70cc", cat: "Vehicles", basePrice: 155000 },
+            { name: "Tyre 175/70/R13", cat: "Vehicles", basePrice: 14000 },
+            { name: "Cement Bag 50kg", cat: "Construction", basePrice: 1250 },
+            { name: "Steel Rebar 1-Ton", cat: "Construction", basePrice: 260000 },
+            { name: "Cotton T-Shirt", cat: "Apparel", basePrice: 1200 },
+            { name: "Leather Shoes", cat: "Apparel", basePrice: 5500 }
         ];
 
-        function renderProducts(data) {
+        // Large Data Generator (Generates thousands of unique listings client-side instantly)
+        const TOTAL_ITEMS = 10000;
+        const productsDatabase = [];
+
+        for (let i = 1; i <= TOTAL_ITEMS; i++) {
+            const base = baseProducts[i % baseProducts.length];
+            const cheapDiff = Math.floor(Math.random() * 500) + 50;
+            const expDiff = Math.floor(Math.random() * 2000) + 600;
+            const cheapPrice = base.basePrice - cheapDiff;
+            const expPrice = base.basePrice + expDiff;
+            
+            const cheapCity = cities[i % cities.length];
+            const expCity = cities[(i + 3) % cities.length];
+            const cheapMkt = markets[i % markets.length];
+            const expMkt = markets[(i + 2) % markets.length];
+
+            productsDatabase.push({
+                id: i,
+                title: `${base.name} Variant #${i}`,
+                category: base.cat,
+                cheapPrice: `Rs. ${cheapPrice.toLocaleString()}`,
+                cheapAddr: `📍 ${cheapMkt}, ${cheapCity}`,
+                expPrice: `Rs. ${expPrice.toLocaleString()}`,
+                expAddr: `📍 ${expMkt}, ${expCity}`,
+                img: `https://picsum.photos/seed/${i + 50}/400/250`
+            });
+        }
+
+        // Pagination & Search State
+        let currentPage = 1;
+        const itemsPerPage = 24;
+        let filteredData = [...productsDatabase];
+
+        function filterData() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+
+            filteredData = productsDatabase.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(query) || item.category.toLowerCase().includes(query);
+                const matchesCat = (cat === 'ALL') || (item.category === cat);
+                return matchesSearch && matchesCat;
+            });
+
+            currentPage = 1;
+            render();
+        }
+
+        function render() {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
 
-            data.forEach(p => {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage) || 1;
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageItems = filteredData.slice(start, end);
+
+            document.getElementById('statsDisplay').innerText = `Total Products: ${filteredData.length.toLocaleString()} | Showing Page ${currentPage} of ${totalPages}`;
+
+            if (pageItems.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px;">کوئی پراڈکٹ نہیں ملی</div>`;
+                document.getElementById('prevBtn').disabled = true;
+                document.getElementById('nextBtn').disabled = true;
+                document.getElementById('pageIndicator').innerText = `Page 0 of 0`;
+                return;
+            }
+
+            pageItems.forEach(p => {
                 grid.innerHTML += `
                     <div class="product-card">
-                        <img src="${p.img}" alt="${p.title}" class="product-image">
-                        <div class="product-title">${p.title}</div>
-                        
-                        <div class="price-row cheap">
-                            Sasti Qeemat: <strong>${p.cheapPrice}</strong>
-                            <div class="address">📍 ${p.cheapAddr}</div>
+                        <div>
+                            <img src="${p.img}" alt="${p.title}" class="product-image" loading="lazy">
+                            <div class="product-cat">${p.category}</div>
+                            <div class="product-title">${p.title}</div>
                         </div>
-
-                        <div class="price-row expensive">
-                            Mehangi Qeemat: <strong>${p.expPrice}</strong>
-                            <div class="address">📍 ${p.expAddr}</div>
+                        <div class="price-section">
+                            <div class="price-card cheap">
+                                <span class="price-title">سستی قیمت</span>
+                                <div class="price-value">${p.cheapPrice}</div>
+                                <div class="address">${p.cheapAddr}</div>
+                            </div>
+                            <div class="price-card expensive">
+                                <span class="price-title">مہنگی قیمت</span>
+                                <div class="price-value">${p.expPrice}</div>
+                                <div class="address">${p.expAddr}</div>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+
+            document.getElementById('pageIndicator').innerText = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
         }
 
-        function searchProduct() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let filtered = products.filter(p => p.title.toLowerCase().includes(input));
-            renderProducts(filtered);
+        function changePage(direction) {
+            currentPage += direction;
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initial Render
-        renderProducts(products);
+        // Initial Load
+        render();
     </script>
 </body>
 </html>
+
 

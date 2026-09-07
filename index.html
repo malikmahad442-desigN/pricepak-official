@@ -1,690 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+let products = [];
 
-<title>PricePak — Compare. Check. Save.</title>
+let currentCategory = "All";
+let currentSearch = "";
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+/* LOAD PRODUCTS FROM products.json */
+async function loadProducts() {
+    try {
+        const response = await fetch("./products.json");
 
-body{
-    font-family:Inter,Arial,sans-serif;
-    background:#07110e;
-    color:#f5fff9;
-}
+        if (!response.ok) {
+            throw new Error("products.json could not be loaded");
+        }
 
-/* HEADER */
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:rgba(7,17,14,.92);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
+        products = await response.json();
 
-.nav{
-    max-width:1250px;
-    margin:auto;
-    padding:18px 25px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
+        renderProducts();
 
-.logo{
-    font-size:27px;
-    font-weight:900;
-    letter-spacing:-1px;
-}
+    } catch (error) {
+        console.error(error);
 
-.logo span{
-    color:#28e38b;
-}
-
-.tag{
-    color:#91a69d;
-    font-size:12px;
-    margin-top:2px;
-}
-
-.navlinks{
-    display:flex;
-    gap:25px;
-}
-
-.navlinks a{
-    color:#cbd8d2;
-    text-decoration:none;
-    font-size:14px;
-}
-
-.navlinks a:hover{
-    color:#28e38b;
-}
-
-/* HERO */
-.hero{
-    max-width:1250px;
-    margin:auto;
-    padding:75px 25px 55px;
-    text-align:center;
-}
-
-.badge{
-    display:inline-block;
-    padding:8px 14px;
-    border:1px solid rgba(40,227,139,.25);
-    background:rgba(40,227,139,.08);
-    color:#28e38b;
-    border-radius:30px;
-    font-size:13px;
-    margin-bottom:20px;
-}
-
-.hero h1{
-    font-size:clamp(40px,7vw,76px);
-    line-height:1;
-    letter-spacing:-3px;
-}
-
-.hero h1 span{
-    color:#28e38b;
-}
-
-.hero p{
-    max-width:650px;
-    margin:22px auto;
-    color:#9cadA5;
-    line-height:1.7;
-    font-size:16px;
-}
-
-/* SEARCH */
-.searchbox{
-    max-width:720px;
-    margin:30px auto 0;
-    display:flex;
-    background:#101d19;
-    border:1px solid #263a32;
-    border-radius:16px;
-    padding:7px;
-}
-
-.searchbox input{
-    flex:1;
-    background:none;
-    border:none;
-    outline:none;
-    color:white;
-    padding:14px;
-    font-size:15px;
-}
-
-.searchbox button{
-    border:none;
-    background:#28e38b;
-    color:#03130c;
-    font-weight:800;
-    padding:0 23px;
-    border-radius:11px;
-    cursor:pointer;
-}
-
-/* CATEGORIES */
-.categories{
-    max-width:1250px;
-    margin:auto;
-    padding:15px 25px 40px;
-}
-
-.categories h2{
-    margin-bottom:18px;
-    font-size:22px;
-}
-
-.category-list{
-    display:flex;
-    gap:12px;
-    overflow-x:auto;
-    padding-bottom:8px;
-}
-
-.category{
-    flex:0 0 auto;
-    padding:12px 18px;
-    background:#101d19;
-    border:1px solid #24372f;
-    border-radius:30px;
-    cursor:pointer;
-    color:#b9c9c2;
-    transition:.2s;
-}
-
-.category:hover,
-.category.active{
-    background:#28e38b;
-    color:#03130c;
-    border-color:#28e38b;
-}
-
-/* PRODUCTS */
-.products{
-    max-width:1250px;
-    margin:auto;
-    padding:15px 25px 80px;
-}
-
-.product-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:linear-gradient(145deg,#101d19,#0b1613);
-    border:1px solid #20342c;
-    border-radius:20px;
-    overflow:hidden;
-    transition:.25s;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-    border-color:#28e38b;
-    box-shadow:0 15px 40px rgba(0,0,0,.3);
-}
-
-.image-wrap{
-    height:220px;
-    background:#fff;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-.image-wrap img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    padding:18px;
-}
-
-.lowest{
-    position:absolute;
-    top:12px;
-    left:12px;
-    background:#28e38b;
-    color:#03130c;
-    padding:7px 10px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:900;
-}
-
-.info{
-    padding:18px;
-}
-
-.category-name{
-    color:#28e38b;
-    font-size:11px;
-    text-transform:uppercase;
-    font-weight:800;
-    letter-spacing:1px;
-}
-
-.info h3{
-    margin:7px 0;
-    font-size:17px;
-}
-
-.price{
-    font-size:22px;
-    font-weight:900;
-    margin:12px 0;
-}
-
-.store{
-    color:#8fa39a;
-    font-size:12px;
-}
-
-.compare{
-    width:100%;
-    margin-top:15px;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid #2a4338;
-    background:#14251e;
-    color:white;
-    cursor:pointer;
-    font-weight:700;
-}
-
-.compare:hover{
-    background:#28e38b;
-    color:#03130c;
-}
-
-/* EMPTY */
-.empty{
-    text-align:center;
-    padding:70px 20px;
-    color:#899b93;
-    display:none;
-}
-
-/* FOOTER */
-footer{
-    border-top:1px solid #1d3028;
-    padding:35px 20px;
-    text-align:center;
-    color:#7f9189;
-}
-
-footer strong{
-    color:#28e38b;
-}
-
-@media(max-width:700px){
-    .navlinks{
-        display:none;
-    }
-
-    .hero{
-        padding-top:50px;
-    }
-
-    .hero h1{
-        letter-spacing:-2px;
-    }
-
-    .searchbox{
-        flex-direction:column;
-        gap:7px;
-    }
-
-    .searchbox button{
-        padding:13px;
-    }
-
-    .product-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:12px;
-    }
-
-    .image-wrap{
-        height:155px;
-    }
-
-    .info{
-        padding:13px;
-    }
-
-    .info h3{
-        font-size:14px;
-    }
-
-    .price{
-        font-size:17px;
+        document.getElementById("productGrid").innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:60px 20px;
+                color:#899b93;
+            ">
+                <h2>Products database load nahi ho saka 😕</h2>
+                <p>Check karo ke products.json same folder mein hai.</p>
+            </div>
+        `;
     }
 }
-</style>
-</head>
-
-<body>
-
-<header>
-<div class="nav">
-
-<div>
-<div class="logo">Price<span>Pak</span></div>
-<div class="tag">Compare. Check. Save.</div>
-</div>
-
-<div class="navlinks">
-<a href="#products">Products</a>
-<a href="#categories">Categories</a>
-<a href="#about">About</a>
-</div>
-
-</div>
-</header>
-
-<section class="hero">
-
-<div class="badge">🇵🇰 Pakistan's Smart Price Comparison</div>
-
-<h1>Find it.<br><span>Compare it.</span><br>Save more.</h1>
-
-<p>
-Compare products and prices in Pakistan from one simple place.
-Find the product you want, check its price and make a smarter buying decision.
-</p>
-
-<div class="searchbox">
-<input id="searchInput" type="text"
-placeholder="Search mobiles, laptops, TVs, headphones...">
-
-<button onclick="searchProducts()">Search</button>
-</div>
-
-</section>
-
-<section class="categories" id="categories">
-
-<h2>Explore Categories</h2>
-
-<div class="category-list">
-
-<div class="category active" onclick="filterCategory('All',this)">All</div>
-<div class="category" onclick="filterCategory('Mobiles',this)">📱 Mobiles</div>
-<div class="category" onclick="filterCategory('Laptops',this)">💻 Laptops</div>
-<div class="category" onclick="filterCategory('Audio',this)">🎧 Audio</div>
-<div class="category" onclick="filterCategory('TV',this)">📺 TVs</div>
-<div class="category" onclick="filterCategory('Watches',this)">⌚ Watches</div>
-<div class="category" onclick="filterCategory('Gaming',this)">🎮 Gaming</div>
-<div class="category" onclick="filterCategory('Fashion',this)">👟 Fashion</div>
-<div class="category" onclick="filterCategory('Home',this)">🏠 Home</div>
-
-</div>
-</section>
-
-<section class="products" id="products">
-
-<div class="product-grid" id="productGrid"></div>
-
-<div class="empty" id="empty">
-<h2>No products found 😕</h2>
-<p>Try another product name or category.</p>
-</div>
-
-</section>
-
-<footer id="about">
-
-<p><strong>PricePak</strong> — Compare. Check. Save.</p>
-
-<p style="margin-top:8px">
-Built with ❤️ in Pakistan
-</p>
-
-<p style="margin-top:12px;font-size:12px">
-Created by Mahad
-</p>
-
-</footer>
-
-
-<script>
-
-const products = [
-
-{
-name:"Samsung Galaxy A55",
-category:"Mobiles",
-price:119999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"iPhone 15",
-category:"Mobiles",
-price:224999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1591337676887-a217a6970a8a?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Google Pixel 9",
-category:"Mobiles",
-price:189999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"HP Pavilion Laptop",
-category:"Laptops",
-price:174999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"MacBook Air",
-category:"Laptops",
-price:299999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Gaming Laptop RTX",
-category:"Laptops",
-price:319999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Sony Wireless Headphones",
-category:"Audio",
-price:79999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"AirPods Pro",
-category:"Audio",
-price:69999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Samsung 55 inch 4K TV",
-category:"TV",
-price:139999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Apple Watch Series",
-category:"Watches",
-price:89999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"PlayStation 5",
-category:"Gaming",
-price:189999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1605901309584-818e25960a8f?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Nike Running Shoes",
-category:"Fashion",
-price:29999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Smart Refrigerator",
-category:"Home",
-price:219999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=800&q=80"
-},
-
-{
-name:"Microwave Oven",
-category:"Home",
-price:34999,
-store:"Demo Market",
-image:"https://images.unsplash.com/photo-1585659722983-3a675dabf23d?auto=format&fit=crop&w=800&q=80"
-}
-
-];
-
-let currentCategory="All";
-let currentSearch="";
 
 
 function renderProducts(){
 
-const grid=document.getElementById("productGrid");
-const empty=document.getElementById("empty");
+    const grid = document.getElementById("productGrid");
+    const empty = document.getElementById("empty");
 
-grid.innerHTML="";
+    grid.innerHTML = "";
 
-let filtered=products.filter(product=>{
+    let filtered = products.filter(product => {
 
-const categoryMatch =
-currentCategory==="All" ||
-product.category===currentCategory;
+        const categoryMatch =
+            currentCategory === "All" ||
+            product.category === currentCategory;
 
-const searchMatch =
-product.name.toLowerCase()
-.includes(currentSearch.toLowerCase());
+        const searchMatch =
+            product.name
+            .toLowerCase()
+            .includes(currentSearch.toLowerCase());
 
-return categoryMatch && searchMatch;
-
-});
-
-if(filtered.length===0){
-
-empty.style.display="block";
-return;
-
-}
-
-empty.style.display="none";
+        return categoryMatch && searchMatch;
+    });
 
 
-filtered.forEach(product=>{
+    if(filtered.length === 0){
 
-const card=document.createElement("div");
+        empty.style.display = "block";
+        return;
 
-card.className="card";
+    }
 
-card.innerHTML=`
+    empty.style.display = "none";
 
-<div class="image-wrap">
 
-<div class="lowest">BEST PRICE</div>
+    filtered.forEach(product => {
 
-<img
-src="${product.image}"
-alt="${product.name}"
-loading="lazy"
->
+        const card = document.createElement("div");
 
-</div>
+        card.className = "card";
 
-<div class="info">
+        card.innerHTML = `
 
-<div class="category-name">
-${product.category}
-</div>
+        <div class="image-wrap">
 
-<h3>${product.name}</h3>
+            <div class="lowest">BEST PRICE</div>
 
-<div class="price">
-PKR ${product.price.toLocaleString()}
-</div>
+            <img
+                src="${product.image}"
+                alt="${product.name}"
+                loading="lazy"
+            >
 
-<div class="store">
-Available at: ${product.store}
-</div>
+        </div>
 
-<button class="compare"
-onclick="compareProduct('${product.name}')">
-Compare Prices →
-</button>
+        <div class="info">
 
-</div>
-`;
+            <div class="category-name">
+                ${product.category}
+            </div>
 
-grid.appendChild(card);
+            <h3>${product.name}</h3>
 
-});
+            <div class="price">
+                PKR ${Number(product.price).toLocaleString()}
+            </div>
+
+            <div class="store">
+                Available at: ${product.store}
+            </div>
+
+            <button
+                class="compare"
+                onclick="compareProduct('${product.name.replace(/'/g, "\\'")}')">
+                Compare Prices →
+            </button>
+
+        </div>
+        `;
+
+        grid.appendChild(card);
+
+    });
 
 }
 
 
 function searchProducts(){
 
-currentSearch=
-document.getElementById("searchInput")
-.value.trim();
+    currentSearch =
+        document
+        .getElementById("searchInput")
+        .value
+        .trim();
 
-renderProducts();
+    renderProducts();
 
-document.getElementById("products")
-.scrollIntoView({
-behavior:"smooth"
-});
-
+    document
+        .getElementById("products")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
 }
 
 
-function filterCategory(category,element){
+function filterCategory(category, element){
 
-currentCategory=category;
+    currentCategory = category;
 
-document
-.querySelectorAll(".category")
-.forEach(btn=>btn.classList.remove("active"));
+    document
+        .querySelectorAll(".category")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
 
-element.classList.add("active");
+    element.classList.add("active");
 
-renderProducts();
+    renderProducts();
 
 }
 
 
 function compareProduct(name){
 
-alert(
-"Price comparison for " +
-name +
-" will show different stores here once real store price data is connected."
-);
+    alert(
+        "Price comparison for " +
+        name +
+        " will be added when multiple store offers are connected."
+    );
 
 }
 
 
 document
-.getElementById("searchInput")
-.addEventListener("keyup",function(e){
+    .getElementById("searchInput")
+    .addEventListener("keyup", function(e){
 
-if(e.key==="Enter"){
-searchProducts();
-}
+        if(e.key === "Enter"){
+            searchProducts();
+        }
 
-});
+    });
 
 
-renderProducts();
-
-</script>
-
-</body>
-</html>
+/* START */
+loadProducts();
